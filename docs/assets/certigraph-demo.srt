@@ -1,0 +1,27 @@
+1
+00:00:00,000 --> 00:00:06,000
+CertiGraph: proof-carrying graph results for untrusted and AI-generated solvers.
+
+2
+00:00:06,000 --> 00:00:14,000
+Modern graph answers can come from black boxes: agents, APIs, GPU jobs, distributed systems.
+
+3
+00:00:14,000 --> 00:00:22,000
+The producer may be complex. The checker stays small, deterministic and auditable.
+
+4
+00:00:22,000 --> 00:00:32,000
+Here a plausible shortest-path answer is wrong. The checker rejects it immediately.
+
+5
+00:00:32,000 --> 00:00:41,000
+Now the result carries a valid certificate. The independent checker accepts.
+
+6
+00:00:41,000 --> 00:00:49,000
+CertiGraph ships checkers for SSSP, MSF, max-flow, topological order and bipartition.
+
+7
+00:00:49,000 --> 00:00:57,000
+Contribute more checkers, integrations, fuzzing and formal verification. Do not trust the solver. Verify the result.

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://certigraph.dev/schemas/topological.certificate.schema.json",
+  "title": "CertiGraph topological-order certificate",
+  "type": "object",
+  "required": ["vertices", "edges", "order"],
+  "properties": {
+    "vertices": {"type": "array", "items": {"type": ["string", "number", "integer"]}, "uniqueItems": true},
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["u", "v"],
+        "properties": {
+          "u": {"type": ["string", "number", "integer"]},
+          "v": {"type": ["string", "number", "integer"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "order": {"type": "array", "items": {"type": ["string", "number", "integer"]}, "uniqueItems": true}
+  },
+  "additionalProperties": true
+}

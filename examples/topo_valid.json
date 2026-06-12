@@ -1,0 +1,10 @@
+{
+  "vertices": ["parse", "typecheck", "optimize", "emit"],
+  "edges": [
+    {"u": "parse", "v": "typecheck"},
+    {"u": "typecheck", "v": "optimize"},
+    {"u": "typecheck", "v": "emit"},
+    {"u": "optimize", "v": "emit"}
+  ],
+  "order": ["parse", "typecheck", "optimize", "emit"]
+}

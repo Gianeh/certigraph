@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://certigraph.dev/schemas/msf.certificate.schema.json",
+  "title": "CertiGraph minimum-spanning-forest certificate",
+  "type": "object",
+  "required": ["vertices", "edges", "chosen"],
+  "properties": {
+    "vertices": {"type": "array", "items": {"type": ["string", "number", "integer"]}, "uniqueItems": true},
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["u", "v", "w"],
+        "properties": {
+          "u": {"type": ["string", "number", "integer"]},
+          "v": {"type": ["string", "number", "integer"]},
+          "w": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "chosen": {"type": "array", "items": {"type": "integer", "minimum": 0}, "uniqueItems": true}
+  },
+  "additionalProperties": true
+}

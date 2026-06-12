@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://certigraph.dev/schemas/maxflow.certificate.schema.json",
+  "title": "CertiGraph maximum-flow/min-cut certificate",
+  "type": "object",
+  "required": ["vertices", "source", "sink", "edges", "flow", "cut"],
+  "properties": {
+    "vertices": {"type": "array", "items": {"type": ["string", "number", "integer"]}, "uniqueItems": true},
+    "source": {"type": ["string", "number", "integer"]},
+    "sink": {"type": ["string", "number", "integer"]},
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["u", "v", "capacity"],
+        "properties": {
+          "u": {"type": ["string", "number", "integer"]},
+          "v": {"type": ["string", "number", "integer"]},
+          "capacity": {"type": "number", "minimum": 0}
+        },
+        "additionalProperties": false
+      }
+    },
+    "flow": {"type": "array", "items": {"type": "number", "minimum": 0}},
+    "cut": {"type": "array", "items": {"type": ["string", "number", "integer"]}, "uniqueItems": true}
+  },
+  "additionalProperties": true
+}

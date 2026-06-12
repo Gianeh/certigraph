@@ -1,0 +1,28 @@
+site_name: CertiGraph
+site_description: Proof-carrying graph results for verifiable computation
+site_url: https://YOUR_ORG.github.io/certigraph/
+repo_url: https://github.com/YOUR_ORG/certigraph
+repo_name: YOUR_ORG/certigraph
+nav:
+  - Home: index.md
+  - Video demo: video-demo.md
+  - Quickstart: quickstart.md
+  - Concepts: concepts.md
+  - Certificate formats: certificate-formats.md
+  - Checker design: checker-design.md
+  - Integrations: integrations.md
+  - Research notes: research.md
+  - Roadmap: roadmap.md
+  - Launch kit: launch-kit.md
+  - Browser demo: demo.html
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.instant
+    - content.code.copy
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true

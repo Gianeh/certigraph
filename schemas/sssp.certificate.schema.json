@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://certigraph.dev/schemas/sssp.certificate.schema.json",
+  "title": "CertiGraph SSSP certificate",
+  "type": "object",
+  "required": ["vertices", "source", "edges", "distance", "parent"],
+  "properties": {
+    "vertices": {"type": "array", "items": {"type": ["string", "number", "integer"]}, "uniqueItems": true},
+    "source": {"type": ["string", "number", "integer"]},
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["u", "v", "w"],
+        "properties": {
+          "u": {"type": ["string", "number", "integer"]},
+          "v": {"type": ["string", "number", "integer"]},
+          "w": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "distance": {"type": "object", "additionalProperties": {"type": ["number", "null", "string"]}},
+    "parent": {"type": "object"}
+  },
+  "additionalProperties": true
+}

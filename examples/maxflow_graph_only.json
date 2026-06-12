@@ -1,0 +1,12 @@
+{
+  "vertices": ["s", "a", "b", "t"],
+  "source": "s",
+  "sink": "t",
+  "edges": [
+    {"u": "s", "v": "a", "capacity": 3},
+    {"u": "s", "v": "b", "capacity": 2},
+    {"u": "a", "v": "t", "capacity": 2},
+    {"u": "b", "v": "t", "capacity": 3},
+    {"u": "a", "v": "b", "capacity": 1}
+  ]
+}

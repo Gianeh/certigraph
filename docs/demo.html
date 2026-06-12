@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CertiGraph browser demo</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; margin: 2rem; max-width: 980px; }
+    textarea { width: 100%; min-height: 280px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    button { padding: .7rem 1rem; font-weight: 700; }
+    pre { background: #111827; color: #d1fae5; padding: 1rem; overflow: auto; }
+    .ok { color: #047857; font-weight: 700; }
+    .bad { color: #b91c1c; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>CertiGraph browser demo</h1>
+  <p>This tiny JavaScript demo verifies a topological-order certificate directly in the browser. The Python project contains the real checkers.</p>
+  <textarea id="input">{
+  "vertices": ["parse", "typecheck", "optimize", "emit"],
+  "edges": [
+    {"u": "parse", "v": "typecheck"},
+    {"u": "typecheck", "v": "optimize"},
+    {"u": "optimize", "v": "emit"}
+  ],
+  "order": ["parse", "typecheck", "optimize", "emit"]
+}</textarea>
+  <p><button onclick="verify()">Verify topological order</button></p>
+  <pre id="output"></pre>
+<script>
+function verifyTopo(data) {
+  const V = new Set(data.vertices);
+  if (data.order.length !== data.vertices.length) return {ok: false, message: "wrong order length"};
+  const seen = new Set(data.order);
+  if (seen.size !== V.size) return {ok: false, message: "order has duplicates"};
+  for (const v of data.order) if (!V.has(v)) return {ok: false, message: `unknown vertex ${v}`};
+  const pos = new Map(data.order.map((v, i) => [v, i]));
+  for (const [i, e] of data.edges.entries()) {
+    if (!V.has(e.u) || !V.has(e.v)) return {ok: false, message: `edge ${i} has unknown endpoint`};
+    if (pos.get(e.u) >= pos.get(e.v)) return {ok: false, message: `edge ${i} violates order: ${e.u} -> ${e.v}`};
+  }
+  return {ok: true, message: "valid topological order", details: {vertices: V.size, edges: data.edges.length}};
+}
+function verify() {
+  const out = document.getElementById("output");
+  try {
+    const data = JSON.parse(document.getElementById("input").value);
+    const result = verifyTopo(data);
+    out.textContent = JSON.stringify(result, null, 2);
+    out.className = result.ok ? "ok" : "bad";
+  } catch (err) {
+    out.textContent = String(err);
+    out.className = "bad";
+  }
+}
+verify();
+</script>
+</body>
+</html>

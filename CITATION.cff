@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If CertiGraph helps your research, teaching, or software, please cite it."
+title: "CertiGraph: proof-carrying graph results for verifiable computation"
+version: "0.2.0"
+date-released: "2026-06-11"
+license: MIT
+authors:
+  - name: "CertiGraph contributors"
+repository-code: "https://github.com/YOUR_ORG/certigraph"
+url: "https://github.com/YOUR_ORG/certigraph"
+keywords:
+  - certifying algorithms
+  - graph algorithms
+  - verifiable computation
+  - proof-carrying data

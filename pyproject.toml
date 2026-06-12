@@ -1,0 +1,108 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "certigraph"
+version = "0.2.0"
+description = "Proof-carrying graph results: tiny independent checkers for untrusted and AI-generated solvers."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "CertiGraph contributors" }]
+maintainers = [{ name = "CertiGraph contributors" }]
+keywords = [
+  "certifying algorithms",
+  "graph algorithms",
+  "verifiable computation",
+  "proof-carrying data",
+  "shortest paths",
+  "maximum flow",
+  "minimum spanning tree",
+  "algorithm engineering",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Quality Assurance",
+  "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "coverage[toml]>=7.0",
+  "mypy>=1.8",
+  "pytest>=8.0",
+  "ruff>=0.6",
+]
+docs = [
+  "mkdocs>=1.6",
+  "mkdocs-material>=9.5",
+]
+networkx = ["networkx>=3.0"]
+media = ["pillow>=10.0"]
+
+[project.urls]
+Homepage = "https://github.com/YOUR_ORG/certigraph"
+Documentation = "https://YOUR_ORG.github.io/certigraph/"
+Repository = "https://github.com/YOUR_ORG/certigraph"
+Issues = "https://github.com/YOUR_ORG/certigraph/issues"
+Changelog = "https://github.com/YOUR_ORG/certigraph/blob/main/CHANGELOG.md"
+
+[project.scripts]
+certigraph = "certigraph.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["certigraph*"]
+
+[tool.setuptools.package-data]
+certigraph = ["py.typed"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["certigraph"]
+omit = ["certigraph/__main__.py", "certigraph/cli.py", "certigraph/adapters/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 80
+
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"examples/*.py" = ["E402"]
+"scripts/*.py" = ["E402"]
+"benchmarks/*.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_unused_configs = true
+warn_return_any = true
+warn_unreachable = true
+no_implicit_optional = true
+check_untyped_defs = true
+packages = ["certigraph"]
