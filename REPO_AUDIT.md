@@ -45,7 +45,6 @@ A second end-to-end review fixed the main presentation issues found in the gener
 
 ## Remaining launch tasks
 
-- Replace `YOUR_ORG` placeholders with the real GitHub owner.
 - Decide whether to publish to PyPI immediately or after the first public tag.
 - Create labels and seed issues listed in `LAUNCH_KIT.md`.
 - Upload `docs/assets/social-preview.png` in GitHub repository settings.

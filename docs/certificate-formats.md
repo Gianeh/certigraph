@@ -23,6 +23,14 @@ The CLI uses JSON. Python APIs accept ordinary Python containers.
 
 Use `null`, `"inf"`, or `"unreachable"` for unreachable vertices.
 
+For integer-only certificates, run:
+
+```bash
+python -m certigraph verify sssp artifact.json --exact-int --abs-tol 0
+```
+
+In exact mode, all finite edge weights and distances must be integers.
+
 ## Minimum spanning forest
 
 ```json
@@ -87,3 +95,29 @@ Use `null`, `"inf"`, or `"unreachable"` for unreachable vertices.
 ```
 
 Color values are arbitrary; only equality and inequality matter.
+
+## Connected components
+
+```json
+{
+  "vertices": ["a", "b", "c", "d", "e", "f"],
+  "edges": [
+    {"u": "a", "v": "b"},
+    {"u": "b", "v": "c"},
+    {"u": "d", "v": "e"}
+  ],
+  "component": {"a": 0, "b": 0, "c": 0, "d": 1, "e": 1, "f": 2}
+}
+```
+
+Acceptance criteria:
+
+- every vertex has a component label;
+- every edge stays within one claimed label;
+- labels neither split a true connected component nor merge disconnected components.
+
+Rejection examples:
+
+- edge endpoints with different labels;
+- missing component labels;
+- two disconnected components sharing the same label.

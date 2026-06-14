@@ -6,8 +6,8 @@ date-released: "2026-06-11"
 license: MIT
 authors:
   - name: "CertiGraph contributors"
-repository-code: "https://github.com/YOUR_ORG/certigraph"
-url: "https://github.com/YOUR_ORG/certigraph"
+repository-code: "https://github.com/Gianeh/certigraph"
+url: "https://github.com/Gianeh/certigraph"
 keywords:
   - certifying algorithms
   - graph algorithms

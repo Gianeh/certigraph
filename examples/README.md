@@ -7,6 +7,7 @@
 - `maxflow_valid.json`
 - `topo_valid.json`
 - `bipartition_valid.json`
+- `components_valid.json`
 
 Verify them with:
 
@@ -16,6 +17,7 @@ python -m certigraph verify msf examples/msf_valid.json
 python -m certigraph verify maxflow examples/maxflow_valid.json
 python -m certigraph verify topo examples/topo_valid.json
 python -m certigraph verify bipartition examples/bipartition_valid.json
+python -m certigraph verify components examples/components_valid.json
 ```
 
 ## Runnable demos
@@ -24,6 +26,7 @@ python -m certigraph verify bipartition examples/bipartition_valid.json
 - `supply_chain_maxflow_demo.py`: max-flow/min-cut certificate for a tiny supply chain.
 - `build_pipeline_topo_demo.py`: topological-order verification for a build pipeline.
 - `networkx_adapter_demo.py`: optional NetworkX integration demo.
+- `networkx_components_demo.py`: optional NetworkX connected-components demo.
 
 ## Invalid examples
 

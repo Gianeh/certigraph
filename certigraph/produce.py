@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections import deque
 from math import inf
-from typing import Any, Dict, Hashable, Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from .verify import CapacityEdge, Vertex, WeightedDiEdge, WeightedUnEdge, _UnionFind
 
@@ -185,3 +185,34 @@ def bipartition_certificate(vertices: Iterable[Vertex], edges: Sequence[Tuple[Ve
                 elif color[v] == color[u]:
                     raise ValueError("graph is not bipartite")
     return color
+
+
+def connected_components_certificate(
+    vertices: Iterable[Vertex], edges: Sequence[Tuple[Vertex, Vertex]]
+) -> Dict[Vertex, int]:
+    """Produce undirected connected-components labels."""
+
+    vs = list(vertices)
+    V = set(vs)
+    adj: Dict[Vertex, List[Vertex]] = {v: [] for v in vs}
+    for u, v in edges:
+        if u not in V or v not in V:
+            raise ValueError("edge endpoint not in vertices")
+        adj[u].append(v)
+        if u != v:
+            adj[v].append(u)
+    component: Dict[Vertex, int] = {}
+    cid = 0
+    for start in vs:
+        if start in component:
+            continue
+        component[start] = cid
+        q = deque([start])
+        while q:
+            u = q.popleft()
+            for v in adj[u]:
+                if v not in component:
+                    component[v] = cid
+                    q.append(v)
+        cid += 1
+    return component

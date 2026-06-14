@@ -16,8 +16,9 @@ The emotional hook is trust. The technical hook is proof-carrying results.
 
 Before public launch:
 
-- [ ] Replace every `YOUR_ORG` placeholder.
+- [x] Repository owner URLs aligned to `Gianeh/certigraph`.
 - [ ] Create labels: `checker`, `good first issue`, `proof-sketch`, `security`, `demo`, `docs`, `needs-triage`, `design-needed`.
+- [x] Keep `docs/assets/social-preview.png` as the canonical social preview asset.
 - [ ] Upload `docs/assets/social-preview.png` in GitHub repository settings as the social preview.
 - [ ] Add topics: `certifying-algorithms`, `graph-algorithms`, `verifiable-computation`, `proof-carrying-data`, `python`, `networkx`, `algorithms`.
 - [ ] Enable Discussions with categories: Ideas, Show and tell, Checker proposals, Q&A.
@@ -42,7 +43,7 @@ Graph algorithms are everywhere, but modern graph results increasingly come from
 
 ### Technical positioning
 
-CertiGraph implements certifying algorithms for graph problems: shortest paths, MST/MSF, max-flow/min-cut, topological order, and bipartition. Producers can be complex; checkers stay small, deterministic, and dependency-free.
+CertiGraph implements certifying algorithms for graph problems: shortest paths, MST/MSF, max-flow/min-cut, topological order, bipartition, and connected components. Producers can be complex; checkers stay small, deterministic, and dependency-free.
 
 ## GitHub repository description
 
@@ -78,7 +79,7 @@ HN body:
 
 > I built CertiGraph, a small dependency-free Python toolkit for proof-carrying graph results. The idea is that an algorithm returns not only an answer, but also a certificate that a small independent checker can validate.
 >
-> Current checkers cover shortest paths, minimum spanning forest, max-flow/min-cut, topological order, and bipartition. The motivating use case is verifying outputs from untrusted, optimized, distributed, or AI-generated solvers.
+> Current checkers cover shortest paths, minimum spanning forest, max-flow/min-cut, topological order, bipartition, and connected components. The motivating use case is verifying outputs from untrusted, optimized, distributed, or AI-generated solvers.
 >
 > The project is alpha, but the core pattern is useful: producers can be complicated; checkers should be boring.
 
@@ -94,7 +95,7 @@ HN body:
 
 > Modern software increasingly relies on computational results from systems we cannot easily audit: AI agents, distributed workflows, optimization services, and high-performance native code.
 >
-> I launched CertiGraph, a small Python toolkit for proof-carrying graph results. It implements independent checkers for shortest paths, MST/MSF, max-flow/min-cut, topological order, and bipartition.
+> I launched CertiGraph, a small Python toolkit for proof-carrying graph results. It implements independent checkers for shortest paths, MST/MSF, max-flow/min-cut, topological order, bipartition, and connected components.
 >
 > The principle is simple: let complex systems produce results, but require those results to carry evidence that a small checker can verify.
 

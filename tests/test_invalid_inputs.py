@@ -2,6 +2,7 @@ import unittest
 
 from certigraph import (
     check_bipartition,
+    check_connected_components,
     check_max_flow_certificate,
     check_minimum_spanning_forest_certificate,
     check_sssp_certificate,
@@ -38,6 +39,15 @@ class TestInvalidInputs(unittest.TestCase):
 
     def test_bipartition_missing_color(self):
         result = check_bipartition(["a", "b"], [("a", "b")], {"a": 0})
+        self.assertFalse(result.ok)
+
+    def test_connected_components_bad_edge_shape(self):
+        result = check_connected_components(["a", "b"], [object()], {"a": 0, "b": 0})
+        self.assertFalse(result.ok)
+        self.assertIn("edge", result.message)
+
+    def test_connected_components_missing_label(self):
+        result = check_connected_components(["a", "b"], [("a", "b")], {"a": 0})
         self.assertFalse(result.ok)
 
 

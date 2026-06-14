@@ -4,10 +4,12 @@ from certigraph import (
     bellman_ford_certificate,
     bipartition_certificate,
     check_bipartition,
+    check_connected_components,
     check_max_flow_certificate,
     check_minimum_spanning_forest_certificate,
     check_sssp_certificate,
     check_topological_order,
+    connected_components_certificate,
     edmonds_karp_certificate,
     kruskal_msf_certificate,
     topological_order_certificate,
@@ -37,6 +39,18 @@ class TestCertigraphVerifiers(unittest.TestCase):
         edges = [("s", "a", 1)]
         result = check_sssp_certificate(vertices, edges, "s", {"s": 0, "a": None}, {"s": None, "a": None})
         self.assertFalse(result.ok)
+
+    def test_sssp_exact_integer_mode(self):
+        vertices = ["s", "a", "b"]
+        edges = [("s", "a", 2), ("a", "b", -1), ("s", "b", 5)]
+        distance = {"s": 0, "a": 2, "b": 1}
+        parent = {"s": None, "a": {"u": "s", "edge": 0}, "b": {"u": "a", "edge": 1}}
+        self.assertTrue(check_sssp_certificate(vertices, edges, "s", distance, parent, abs_tol=0, exact=True).ok)
+
+        bad_distance = dict(distance)
+        bad_distance["b"] = 1.0
+        bad = check_sssp_certificate(vertices, edges, "s", bad_distance, parent, abs_tol=0, exact=True)
+        self.assertFalse(bad.ok)
 
     def test_msf_valid_and_tampered(self):
         vertices = ["a", "b", "c", "d", "e"]
@@ -89,6 +103,17 @@ class TestCertigraphVerifiers(unittest.TestCase):
         edges = [(1, 2), (2, 3), (3, 1)]
         with self.assertRaises(ValueError):
             bipartition_certificate(vertices, edges)
+
+    def test_connected_components_valid_and_tampered(self):
+        vertices = ["a", "b", "c", "d", "e", "f"]
+        edges = [("a", "b"), ("b", "c"), ("d", "e")]
+        component = connected_components_certificate(vertices, edges)
+        self.assertTrue(check_connected_components(vertices, edges, component).ok)
+
+        tampered = dict(component)
+        tampered["c"] = component["d"]
+        bad = check_connected_components(vertices, edges, tampered)
+        self.assertFalse(bad.ok)
 
 
 if __name__ == "__main__":

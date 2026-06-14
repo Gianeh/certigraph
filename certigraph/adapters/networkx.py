@@ -34,3 +34,9 @@ def capacity_edges(G: Any, *, capacity: str = "capacity", default: float = 1.0) 
     """Extract directed capacity edges from a NetworkX-like graph."""
 
     return [(u, v, float(data.get(capacity, default))) for u, v, data in G.edges(data=True)]
+
+
+def undirected_edges(G: Any) -> List[Tuple[Vertex, Vertex]]:
+    """Extract undirected edges from a NetworkX-like graph."""
+
+    return [(u, v) for u, v in G.edges()]

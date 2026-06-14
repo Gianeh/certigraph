@@ -2,4 +2,6 @@
 
 See the repository-level `ROADMAP.md` for the launch roadmap.
 
-The most valuable next milestone is a checker for bipartite matching using the classic matching plus vertex cover certificate. It is easy to explain, practically useful, and a beautiful example of dual certificates.
+Recent 0.3 milestone shipped: connected-components verification with schema + tests.
+
+Next high-impact milestone: SCC + condensation DAG, to strengthen graph-structure coverage while keeping the checker small and deterministic.

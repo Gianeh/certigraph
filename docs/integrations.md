@@ -20,6 +20,13 @@ distance, parent = bellman_ford_certificate(vertices, edges, "s")
 assert check_sssp_certificate(vertices, edges, "s", distance, parent).ok
 ```
 
+End-to-end scripts in this repository:
+
+```bash
+python examples/networkx_adapter_demo.py
+python examples/networkx_components_demo.py
+```
+
 ## Solver services
 
 A remote solver can return JSON:
@@ -44,3 +51,5 @@ python -m certigraph verify maxflow artifact.json
 ```
 
 A rejected certificate exits with code `2`, making it natural to fail builds, stop deployments, or quarantine pipeline outputs.
+
+A ready-to-use workflow is included in `.github/workflows/verify-solver-output.yml`.

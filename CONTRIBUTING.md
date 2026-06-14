@@ -9,7 +9,7 @@ This guide is optimized for useful, reviewable contributions.
 ## Fast setup
 
 ```bash
-git clone https://github.com/YOUR_ORG/certigraph.git
+git clone https://github.com/Gianeh/certigraph.git
 cd certigraph
 python -m venv .venv
 source .venv/bin/activate

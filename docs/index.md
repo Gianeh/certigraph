@@ -34,6 +34,7 @@ The checker is deliberately small and boring. That makes it easier to audit, por
 | Max flow | flow + s-t cut | feasible flow equals feasible cut capacity |
 | Topological order | order | every directed edge points forward |
 | Bipartition | coloring | every edge crosses colors |
+| Connected components | component labels | labels match connectivity exactly |
 
 ## One-minute start
 
@@ -46,7 +47,7 @@ python -m pip install certigraph
 To run the bundled examples from a repository clone:
 
 ```bash
-git clone https://github.com/YOUR_ORG/certigraph.git
+git clone https://github.com/Gianeh/certigraph.git
 cd certigraph
 python -m pip install -e .
 python -m certigraph verify sssp examples/sssp_valid.json
