@@ -1,0 +1,2 @@
+[console_scripts]
+certigraph = certigraph.cli:main
