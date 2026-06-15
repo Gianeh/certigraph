@@ -1,0 +1,56 @@
+name: Verify solver output
+
+on:
+  workflow_call:
+    inputs:
+      kind:
+        description: Certificate kind (sssp, msf, maxflow, topo, bipartition, components)
+        required: false
+        type: string
+        default: sssp
+      json_file:
+        description: Path to the solver output/certificate JSON file
+        required: false
+        type: string
+        default: examples/sssp_valid.json
+      abs_tol:
+        description: Absolute tolerance for numeric checkers
+        required: false
+        type: string
+        default: "1e-9"
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: Certificate kind (sssp, msf, maxflow, topo, bipartition, components)
+        required: false
+        default: sssp
+      json_file:
+        description: Path to the solver output/certificate JSON file
+        required: false
+        default: examples/sssp_valid.json
+      abs_tol:
+        description: Absolute tolerance for numeric checkers
+        required: false
+        default: "1e-9"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install CertiGraph
+        run: python -m pip install -e .
+
+      - name: Verify certificate
+        run: >-
+          python -m certigraph verify
+          "${{ inputs.kind || github.event.inputs.kind || 'sssp' }}"
+          "${{ inputs.json_file || github.event.inputs.json_file || 'examples/sssp_valid.json' }}"
+          --abs-tol "${{ inputs.abs_tol || github.event.inputs.abs_tol || '1e-9' }}"

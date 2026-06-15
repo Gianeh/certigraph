@@ -65,3 +65,20 @@ The certificate is a permutation of vertices. Every directed edge must go from e
 ### Bipartition
 
 The certificate assigns a color/side to every vertex. Every edge must connect unequal colors. This is exactly the definition of a bipartite graph.
+
+### Connected components
+
+The certificate assigns one label to each vertex.
+
+The checker verifies:
+
+1. every edge endpoint pair has the same claimed label;
+2. graph-connected vertices are never split into different labels;
+3. vertices from different graph components are never merged into one label.
+
+These conditions are equivalent to partition equality between the claimed labeling and the graph's true connected components.
+
+## Current limits
+
+- Numeric checks currently use finite Python numbers with absolute tolerance.
+- For adversarial numeric settings, exact integer/rational verification modes are still a roadmap item.

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360" role="img" aria-labelledby="title desc">
+  <title id="title">CertiGraph certificate flow</title>
+  <desc id="desc">An untrusted solver emits a result and certificate, then a small checker accepts or rejects it.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect width="980" height="360" rx="28" fill="#0b1020"/>
+  <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif">
+    <rect x="40" y="86" width="230" height="150" rx="24" fill="#1e1b4b" stroke="#7c3aed" stroke-width="3"/>
+    <text x="70" y="136" fill="#f8fafc" font-size="28" font-weight="800">Producer</text>
+    <text x="70" y="174" fill="#c4b5fd" font-size="18">fast / remote / AI</text>
+    <text x="70" y="204" fill="#c4b5fd" font-size="18">not trusted</text>
+    <line x1="278" y1="160" x2="405" y2="160" stroke="#94a3b8" stroke-width="5" marker-end="url(#arrow)"/>
+    <rect x="415" y="60" width="210" height="88" rx="18" fill="#172554" stroke="#38bdf8" stroke-width="3"/>
+    <text x="445" y="112" fill="#e0f2fe" font-size="25" font-weight="800">result</text>
+    <rect x="415" y="178" width="210" height="88" rx="18" fill="#064e3b" stroke="#10b981" stroke-width="3"/>
+    <text x="445" y="232" fill="#d1fae5" font-size="25" font-weight="800">certificate</text>
+    <line x1="634" y1="105" x2="730" y2="150" stroke="#94a3b8" stroke-width="5" marker-end="url(#arrow)"/>
+    <line x1="634" y1="222" x2="730" y2="174" stroke="#94a3b8" stroke-width="5" marker-end="url(#arrow)"/>
+    <rect x="740" y="86" width="200" height="150" rx="24" fill="#022c22" stroke="#34d399" stroke-width="3"/>
+    <text x="775" y="134" fill="#f8fafc" font-size="28" font-weight="800">Checker</text>
+    <text x="775" y="174" fill="#a7f3d0" font-size="18">small / boring</text>
+    <text x="775" y="204" fill="#a7f3d0" font-size="18">trusted core</text>
+    <text x="340" y="318" fill="#cbd5e1" font-size="22">Accept only results whose evidence checks out.</text>
+  </g>
+</svg>

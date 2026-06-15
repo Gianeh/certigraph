@@ -31,12 +31,38 @@ class TestCLI(unittest.TestCase):
         payload = json.loads(proc.stdout)
         self.assertFalse(payload["ok"])
 
+    def test_verify_components_example(self):
+        proc = self.run_cli("verify", "components", "examples/components_valid.json")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        payload = json.loads(proc.stdout)
+        self.assertTrue(payload["ok"])
+
+    def test_verify_sssp_exact_integer_mode(self):
+        with tempfile.TemporaryDirectory() as td:
+            source = ROOT / "examples" / "sssp_valid.json"
+            data = json.loads(source.read_text(encoding="utf-8"))
+            data["distance"]["a"] = 2.5
+            bad = Path(td) / "sssp_float_distance.json"
+            bad.write_text(json.dumps(data), encoding="utf-8")
+            proc = self.run_cli("verify", "sssp", str(bad), "--exact-int", "--abs-tol", "0")
+            self.assertEqual(proc.returncode, 2)
+            payload = json.loads(proc.stdout)
+            self.assertFalse(payload["ok"])
+
     def test_produce_then_verify(self):
         with tempfile.TemporaryDirectory() as td:
             out = Path(td) / "msf.cert.json"
             produced = self.run_cli("produce", "msf", "examples/msf_graph_only.json", "--out", str(out))
             self.assertEqual(produced.returncode, 0, produced.stderr)
             verified = self.run_cli("verify", "msf", str(out))
+            self.assertEqual(verified.returncode, 0, verified.stderr)
+
+    def test_produce_components_then_verify(self):
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td) / "components.cert.json"
+            produced = self.run_cli("produce", "components", "examples/components_graph_only.json", "--out", str(out))
+            self.assertEqual(produced.returncode, 0, produced.stderr)
+            verified = self.run_cli("verify", "components", str(out))
             self.assertEqual(verified.returncode, 0, verified.stderr)
 
     def test_hash_outputs_digest_or_envelope(self):

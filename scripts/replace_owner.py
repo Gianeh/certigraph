@@ -1,4 +1,4 @@
-"""Replace YOUR_ORG placeholders before publishing the repository."""
+"""Replace repository-owner placeholders before publishing the repository."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TEXT_SUFFIXES = {".md", ".toml", ".yml", ".yaml", ".cff", ".txt"}
+OWNER_PLACEHOLDER = "__REPO_OWNER__"
 
 
 def main() -> int:
@@ -17,7 +18,7 @@ def main() -> int:
     for path in ROOT.rglob("*"):
         if path.is_file() and path.suffix in TEXT_SUFFIXES and ".git" not in path.parts:
             text = path.read_text(encoding="utf-8")
-            new = text.replace("YOUR_ORG", args.owner)
+            new = text.replace(OWNER_PLACEHOLDER, args.owner)
             if new != text:
                 path.write_text(new, encoding="utf-8")
                 changed.append(path.relative_to(ROOT))

@@ -17,6 +17,7 @@ from .envelope import make_envelope, sha256_json
 from .produce import (
     bellman_ford_certificate,
     bipartition_certificate,
+    connected_components_certificate,
     edmonds_karp_certificate,
     kruskal_msf_certificate,
     topological_order_certificate,
@@ -24,6 +25,7 @@ from .produce import (
 from .verify import (
     CheckResult,
     check_bipartition,
+    check_connected_components,
     check_max_flow_certificate,
     check_minimum_spanning_forest_certificate,
     check_sssp_certificate,
@@ -77,10 +79,18 @@ def _result_to_json(result: CheckResult) -> Dict[str, Any]:
     return {"ok": result.ok, "message": result.message, "details": result.details}
 
 
-def verify(kind: str, data: Dict[str, Any], abs_tol: float) -> CheckResult:
+def verify(kind: str, data: Dict[str, Any], abs_tol: float, *, exact: bool = False) -> CheckResult:
     vertices = data["vertices"]
     if kind == "sssp":
-        return check_sssp_certificate(vertices, _edges_w(data), data["source"], data["distance"], data.get("parent", {}), abs_tol=abs_tol)
+        return check_sssp_certificate(
+            vertices,
+            _edges_w(data),
+            data["source"],
+            data["distance"],
+            data.get("parent", {}),
+            abs_tol=abs_tol,
+            exact=exact,
+        )
     if kind in {"msf", "mst"}:
         return check_minimum_spanning_forest_certificate(vertices, _edges_w(data), data["chosen"], abs_tol=abs_tol)
     if kind == "maxflow":
@@ -89,6 +99,8 @@ def verify(kind: str, data: Dict[str, Any], abs_tol: float) -> CheckResult:
         return check_topological_order(vertices, _edges_unweighted(data), data["order"])
     if kind in {"bipartition", "bipartite"}:
         return check_bipartition(vertices, _edges_unweighted(data), data["color"])
+    if kind in {"components", "connected-components", "cc"}:
+        return check_connected_components(vertices, _edges_unweighted(data), data["component"])
     raise ValueError(f"unknown kind: {kind}")
 
 
@@ -109,6 +121,8 @@ def produce(kind: str, data: Dict[str, Any]) -> Dict[str, Any]:
         out["order"] = topological_order_certificate(vertices, _edges_unweighted(data))
     elif kind in {"bipartition", "bipartite"}:
         out["color"] = bipartition_certificate(vertices, _edges_unweighted(data))
+    elif kind in {"components", "connected-components", "cc"}:
+        out["component"] = connected_components_certificate(vertices, _edges_unweighted(data))
     else:
         raise ValueError(f"unknown kind: {kind}")
     return out
@@ -119,12 +133,43 @@ def main(argv: Optional[List[str]] = None) -> int:
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     p_verify = sub.add_parser("verify", help="verify a certificate JSON file")
-    p_verify.add_argument("kind", choices=["sssp", "msf", "mst", "maxflow", "topo", "topological", "bipartition", "bipartite"])
+    p_verify.add_argument(
+        "kind",
+        choices=[
+            "sssp",
+            "msf",
+            "mst",
+            "maxflow",
+            "topo",
+            "topological",
+            "bipartition",
+            "bipartite",
+            "components",
+            "connected-components",
+            "cc",
+        ],
+    )
     p_verify.add_argument("json_file")
     p_verify.add_argument("--abs-tol", type=float, default=1e-9)
+    p_verify.add_argument("--exact-int", action="store_true", help="use exact integer mode for SSSP verification")
 
     p_produce = sub.add_parser("produce", help="produce a certificate JSON file using reference algorithms")
-    p_produce.add_argument("kind", choices=["sssp", "msf", "mst", "maxflow", "topo", "topological", "bipartition", "bipartite"])
+    p_produce.add_argument(
+        "kind",
+        choices=[
+            "sssp",
+            "msf",
+            "mst",
+            "maxflow",
+            "topo",
+            "topological",
+            "bipartition",
+            "bipartite",
+            "components",
+            "connected-components",
+            "cc",
+        ],
+    )
     p_produce.add_argument("json_file")
     p_produce.add_argument("--out", default=None)
 
@@ -137,7 +182,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     try:
         data = _read(args.json_file)
         if args.cmd == "verify":
-            result = verify(args.kind, data, args.abs_tol)
+            result = verify(args.kind, data, args.abs_tol, exact=args.exact_int)
             print(json.dumps(_result_to_json(result), indent=2, sort_keys=True))
             return 0 if result.ok else 2
         if args.cmd == "produce":

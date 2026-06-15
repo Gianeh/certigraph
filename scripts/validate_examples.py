@@ -20,12 +20,14 @@ VALID = {
     "maxflow": ROOT / "examples" / "maxflow_valid.json",
     "topo": ROOT / "examples" / "topo_valid.json",
     "bipartition": ROOT / "examples" / "bipartition_valid.json",
+    "components": ROOT / "examples" / "components_valid.json",
 }
 INVALID = {
     "sssp": ROOT / "examples" / "invalid" / "sssp_tampered_distance.json",
     "maxflow": ROOT / "examples" / "invalid" / "maxflow_bad_cut.json",
     "topo": ROOT / "examples" / "invalid" / "topo_reversed_order.json",
     "bipartition": ROOT / "examples" / "invalid" / "bipartition_odd_cycle.json",
+    "components": ROOT / "examples" / "invalid" / "components_tampered_labels.json",
 }
 
 

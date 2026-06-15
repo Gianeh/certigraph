@@ -12,9 +12,10 @@ CertiGraph is not “a graph library.” It is a verification layer for graph re
 
 ## Launch checklist
 
-1. Replace `YOUR_ORG` placeholders.
+1. Repository owner URLs are aligned to `Gianeh/certigraph`.
 2. Upload `docs/assets/social-preview.png` as the GitHub social preview.
 3. Add repository topics: `certifying-algorithms`, `graph-algorithms`, `verifiable-computation`, `proof-carrying-data`, `python`.
 4. Enable GitHub Pages from the Docs workflow.
-5. Pin a first good issue: “Add bipartite matching checker.”
-6. Record a short demo GIF or use `docs/assets/terminal-demo.svg` in the README.
+5. Create labels: `checker`, `good first issue`, `proof-sketch`, `security`, `demo`, `docs`, `needs-triage`, `design-needed`.
+6. Pin a first good issue: “Add bipartite matching checker.”
+7. Record a short demo GIF or use `docs/assets/terminal-demo.svg` in the README.

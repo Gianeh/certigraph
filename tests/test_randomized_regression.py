@@ -5,10 +5,12 @@ from certigraph import (
     bellman_ford_certificate,
     bipartition_certificate,
     check_bipartition,
+    check_connected_components,
     check_max_flow_certificate,
     check_minimum_spanning_forest_certificate,
     check_sssp_certificate,
     check_topological_order,
+    connected_components_certificate,
     edmonds_karp_certificate,
     kruskal_msf_certificate,
     topological_order_certificate,
@@ -77,6 +79,18 @@ class TestRandomizedRegression(unittest.TestCase):
             edges = [(u, v) for u in left for v in right if rng.random() < 0.4]
             color = bipartition_certificate(vertices, edges)
             self.assertTrue(check_bipartition(vertices, edges, color).ok)
+
+    def test_random_connected_components(self):
+        rng = random.Random(4242)
+        for n in range(1, 16):
+            vertices = list(range(n))
+            edges = []
+            for u in range(n):
+                for v in range(u + 1, n):
+                    if rng.random() < 0.25:
+                        edges.append((u, v))
+            component = connected_components_certificate(vertices, edges)
+            self.assertTrue(check_connected_components(vertices, edges, component).ok)
 
 
 if __name__ == "__main__":

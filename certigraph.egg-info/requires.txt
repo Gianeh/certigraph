@@ -1,0 +1,16 @@
+
+[dev]
+coverage[toml]>=7.0
+mypy>=1.8
+pytest>=8.0
+ruff>=0.6
+
+[docs]
+mkdocs>=1.6
+mkdocs-material>=9.5
+
+[media]
+pillow>=10.0
+
+[networkx]
+networkx>=3.0

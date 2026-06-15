@@ -53,6 +53,7 @@ CertiGraph makes that pattern concrete on familiar graph problems:
 | Maximum flow | edge flows | flow plus an s-t cut | feasible flow and equal-value cut certify optimality |
 | Topological order | vertex order | the order | every directed edge goes forward |
 | Bipartition | vertex colors | the coloring | every edge crosses the partition |
+| Connected components | component label per vertex | the labeling | labels match graph connectivity exactly |
 
 Runtime dependencies: **zero**. The producers are included for demos, but the important artifact is the verifier layer.
 
@@ -67,7 +68,7 @@ pip install certigraph
 From source today:
 
 ```bash
-git clone https://github.com/YOUR_ORG/certigraph.git
+git clone https://github.com/Gianeh/certigraph.git
 cd certigraph
 python -m pip install -e .
 python -m unittest discover -v
@@ -127,6 +128,13 @@ Canonical hashing for reproducible certificates:
 ```bash
 python -m certigraph hash examples/sssp_valid.json
 python -m certigraph hash examples/sssp_valid.json --envelope-kind sssp
+```
+
+NetworkX end-to-end examples:
+
+```bash
+python examples/networkx_adapter_demo.py
+python examples/networkx_components_demo.py
 ```
 
 ## Repository map

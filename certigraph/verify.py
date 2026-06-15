@@ -50,6 +50,10 @@ def _is_number(x: Any) -> bool:
     return isinstance(x, Real) and not isinstance(x, bool) and isfinite(float(x))
 
 
+def _is_int_number(x: Any) -> bool:
+    return isinstance(x, int) and not isinstance(x, bool)
+
+
 def _eq(a: float, b: float, abs_tol: float) -> bool:
     return abs(float(a) - float(b)) <= abs_tol
 
@@ -94,6 +98,28 @@ def _validate_weighted_edges(
         if not _is_number(w):
             return None, _fail(f"edge {field} must be a finite number", edge_index=i, value=repr(w))
         out.append((u, v, float(w)))
+    return out, None
+
+
+def _validate_weighted_edges_int(
+    vertices: Sequence[Vertex], edges: Sequence[Tuple[Any, Any, Any]], *, field: str = "w"
+) -> Tuple[Optional[List[Tuple[Vertex, Vertex, int]]], Optional[CheckResult]]:
+    V = set(vertices)
+    out: List[Tuple[Vertex, Vertex, int]] = []
+    try:
+        iterator = enumerate(edges)
+    except TypeError:
+        return None, _fail("edges must be iterable")
+    for i, e in iterator:
+        try:
+            u, v, w = e
+        except (TypeError, ValueError):
+            return None, _fail("edge must have three fields", edge_index=i, edge=repr(e))
+        if u not in V or v not in V:
+            return None, _fail("edge endpoint not in vertices", edge_index=i, edge=(u, v))
+        if not _is_int_number(w):
+            return None, _fail(f"edge {field} must be an integer in exact mode", edge_index=i, value=repr(w))
+        out.append((u, v, int(w)))
     return out, None
 
 
@@ -180,6 +206,63 @@ def check_bipartition(
     return _pass("valid bipartition", vertices=len(vs), edges=len(edges))
 
 
+def check_connected_components(
+    vertices: Iterable[Vertex], edges: Sequence[Tuple[Vertex, Vertex]], component: Mapping[Vertex, Any]
+) -> CheckResult:
+    """Verify an undirected connected-components certificate.
+
+    Certificate: one component label for each vertex.
+
+    Verification idea:
+      1. Every edge must stay inside one claimed component.
+      2. Vertices that are graph-connected must have the same label.
+      3. Vertices in different graph components must not share a label.
+    """
+
+    vs, err = _vertex_list(vertices)
+    if err is not None:
+        return err
+    assert vs is not None
+    V = set(vs)
+    missing = [v for v in vs if v not in component]
+    if missing:
+        return _fail("component label missing for vertex", vertex=missing[0])
+
+    parsed_edges: List[Tuple[Vertex, Vertex]] = []
+    uf = _UnionFind(vs)
+    for i, e in enumerate(edges):
+        try:
+            u, v = e
+        except (TypeError, ValueError):
+            return _fail("edge must have two fields", edge_index=i, edge=repr(e))
+        if u not in V or v not in V:
+            return _fail("edge endpoint not in vertices", edge_index=i, edge=(u, v))
+        if component[u] != component[v]:
+            return _fail("edge crosses claimed components", edge_index=i, edge=(u, v), component_u=component[u], component_v=component[v])
+        parsed_edges.append((u, v))
+        if u != v:
+            uf.union(u, v)
+
+    root_to_label: Dict[Vertex, Any] = {}
+    label_to_root: Dict[Any, Vertex] = {}
+    for v in vs:
+        label = component[v]
+        try:
+            hash(label)
+        except TypeError:
+            return _fail("component label must be hashable", vertex=v, label=repr(label))
+        root = uf.find(v)
+        if root in root_to_label and root_to_label[root] != label:
+            return _fail("connected vertices assigned different labels", vertex=v, expected=root_to_label[root], actual=label)
+        root_to_label[root] = label
+        if label in label_to_root and label_to_root[label] != root:
+            return _fail("disconnected components merged under one label", vertex=v, label=label)
+        label_to_root[label] = root
+
+    components = len({uf.find(v) for v in vs})
+    return _pass("valid connected-components certificate", vertices=len(vs), edges=len(parsed_edges), components=components)
+
+
 def _distance_value(x: Any) -> Optional[float]:
     if x is None:
         return None
@@ -232,6 +315,7 @@ def check_sssp_certificate(
     parent: Mapping[Vertex, Any],
     *,
     abs_tol: float = 1e-9,
+    exact: bool = False,
 ) -> CheckResult:
     """Verify a single-source shortest-path certificate.
 
@@ -253,10 +337,17 @@ def check_sssp_certificate(
          so no path can beat the claim.
       3. No edge leaves the finite-distance region toward an unreachable vertex,
          so all reachable vertices are finite.
+
+    Numeric modes:
+      - default: finite real numbers with absolute tolerance ``abs_tol``;
+      - ``exact=True``: integer-only validation with exact equality/inequality
+        checks and ``abs_tol=0``.
     """
 
     if abs_tol < 0:
         return _fail("abs_tol must be non-negative", abs_tol=abs_tol)
+    if exact and abs_tol != 0:
+        return _fail("exact mode requires abs_tol=0", abs_tol=abs_tol)
     vs, err = _vertex_list(vertices)
     if err is not None:
         return err
@@ -264,22 +355,40 @@ def check_sssp_certificate(
     V = set(vs)
     if source not in V:
         return _fail("source not in vertices", source=source)
-    es, err = _validate_weighted_edges(vs, edges)
+    if exact:
+        es, err = _validate_weighted_edges_int(vs, edges)
+    else:
+        es, err = _validate_weighted_edges(vs, edges)
     if err is not None:
         return err
     assert es is not None
 
-    D: Dict[Vertex, Optional[float]] = {}
+    D: Dict[Vertex, Optional[Any]] = {}
     for v in vs:
         if v not in distance:
             return _fail("distance missing for vertex", vertex=v)
         raw = distance[v]
-        d = _distance_value(raw)
-        if d is None and raw is not None and not (isinstance(raw, str) and raw.lower() in {"inf", "+inf", "infinity", "unreachable", "none", "null"}):
-            return _fail("distance must be finite number or unreachable marker", vertex=v, value=repr(raw))
+        if exact:
+            if raw is None or (isinstance(raw, str) and raw.lower() in {"inf", "+inf", "infinity", "unreachable", "none", "null"}):
+                d = None
+            elif _is_int_number(raw):
+                d = int(raw)
+            else:
+                return _fail("distance must be integer or unreachable marker in exact mode", vertex=v, value=repr(raw))
+        else:
+            d = _distance_value(raw)
+            if d is None and raw is not None and not (
+                isinstance(raw, str) and raw.lower() in {"inf", "+inf", "infinity", "unreachable", "none", "null"}
+            ):
+                return _fail("distance must be finite number or unreachable marker", vertex=v, value=repr(raw))
         D[v] = d
 
-    if D[source] is None or not _eq(D[source] or 0.0, 0.0, abs_tol):
+    if D[source] is None:
+        return _fail("source distance must be zero", source=source, distance=D[source])
+    if exact:
+        if D[source] != 0:
+            return _fail("source distance must be zero", source=source, distance=D[source])
+    elif not _eq(float(D[source]), 0.0, abs_tol):
         return _fail("source distance must be zero", source=source, distance=D[source])
 
     # Parent entries must identify real edges and realize equality.
@@ -306,8 +415,23 @@ def check_sssp_certificate(
         if D[u] is None:
             return _fail("parent vertex is unreachable", vertex=v, parent=u)
         assert D[v] is not None and D[u] is not None
-        if not _eq(D[v], D[u] + w, abs_tol):
-            return _fail("parent edge does not realize claimed distance", vertex=v, distance=D[v], parent_distance=D[u], edge_weight=w)
+        if exact:
+            if D[v] != D[u] + w:
+                return _fail(
+                    "parent edge does not realize claimed distance",
+                    vertex=v,
+                    distance=D[v],
+                    parent_distance=D[u],
+                    edge_weight=w,
+                )
+        elif not _eq(float(D[v]), float(D[u]) + float(w), abs_tol):
+            return _fail(
+                "parent edge does not realize claimed distance",
+                vertex=v,
+                distance=D[v],
+                parent_distance=D[u],
+                edge_weight=w,
+            )
         parent_edge[v] = (u, edge_idx)
 
     # Parent chains must terminate at source; otherwise they do not witness paths.
@@ -343,8 +467,26 @@ def check_sssp_certificate(
             continue
         if dv is None:
             return _fail("edge leaves reachable region toward vertex marked unreachable", edge_index=i, edge=(u, v, w))
-        if not _leq(dv, du + w, abs_tol):
-            return _fail("edge relaxation would improve claimed distance", edge_index=i, edge=(u, v, w), distance_u=du, distance_v=dv, candidate=du + w)
+        candidate = du + w
+        if exact:
+            if dv > candidate:
+                return _fail(
+                    "edge relaxation would improve claimed distance",
+                    edge_index=i,
+                    edge=(u, v, w),
+                    distance_u=du,
+                    distance_v=dv,
+                    candidate=candidate,
+                )
+        elif not _leq(float(dv), float(candidate), abs_tol):
+            return _fail(
+                "edge relaxation would improve claimed distance",
+                edge_index=i,
+                edge=(u, v, w),
+                distance_u=du,
+                distance_v=dv,
+                candidate=candidate,
+            )
 
     reachable = sum(1 for d in D.values() if d is not None)
     return _pass("valid SSSP certificate", vertices=len(vs), edges=len(es), reachable=reachable)

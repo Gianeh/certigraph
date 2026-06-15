@@ -1,12 +1,14 @@
 # Changelog
 
-## Unreleased — layout and polish pass
+## Unreleased — 0.3 credibility increment
 
-- Fixed README and docs copy around source-vs-PyPI installation.
-- Regenerated social preview with cleaner spacing and no text overlap.
-- Fixed SVG graph-diagram labels that inherited strokes and rendered as blobs.
-- Regenerated video demo with corrected slide layout, terminal clipping, code-card sizing, and progress timing.
-- Synced root-level and docs-level visual assets.
+- Added connected-components checker support across verifier, producer, Python API, and CLI.
+- Added exact integer SSSP verification mode (`--exact-int`).
+- Added connected-components schema plus valid/tampered examples and malformed/randomized regression tests.
+- Added NetworkX end-to-end connected-components integration demo.
+- Added reusable GitHub Actions workflow to verify solver-output artifacts in CI.
+- Replaced repository owner placeholders and aligned public URLs to `Gianeh/certigraph`.
+- Updated docs with connected-components certificate format, proof sketch, and roadmap updates.
 
 ## 0.2.0 — GitHub launch kit
 

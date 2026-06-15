@@ -56,11 +56,11 @@ networkx = ["networkx>=3.0"]
 media = ["pillow>=10.0"]
 
 [project.urls]
-Homepage = "https://github.com/YOUR_ORG/certigraph"
-Documentation = "https://YOUR_ORG.github.io/certigraph/"
-Repository = "https://github.com/YOUR_ORG/certigraph"
-Issues = "https://github.com/YOUR_ORG/certigraph/issues"
-Changelog = "https://github.com/YOUR_ORG/certigraph/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/Gianeh/certigraph"
+Documentation = "https://Gianeh.github.io/certigraph/"
+Repository = "https://github.com/Gianeh/certigraph"
+Issues = "https://github.com/Gianeh/certigraph/issues"
+Changelog = "https://github.com/Gianeh/certigraph/blob/main/CHANGELOG.md"
 
 [project.scripts]
 certigraph = "certigraph.cli:main"

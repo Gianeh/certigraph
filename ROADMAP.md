@@ -14,22 +14,17 @@ The project’s north star is simple:
 - [x] Randomized regression tests.
 - [x] JSON Schema drafts.
 
-## 0.3: More graph certificates
+## 0.3: Technical credibility
 
-High-value checkers:
-
-- strongly connected components + condensation DAG;
-- connected components;
-- shortest-path tree with exact integer mode;
-- bipartite matching + vertex-cover certificate;
-- dominator tree certificate;
-- Eulerian trail certificate;
-- graph coloring checker;
-- min-cost flow certificate.
+- [x] Connected-components checker with certificate docs, schema, tampering tests, malformed-input tests, and randomized regression tests.
+- [ ] Strongly connected components + condensation DAG checker.
+- [x] Shortest-path exact integer verification mode (`--exact-int`).
+- [ ] Bipartite matching + vertex-cover certificate.
 
 ## 0.4: Ecosystem integrations
 
-- NetworkX adapter examples.
+- [x] NetworkX end-to-end examples (`examples/networkx_adapter_demo.py`, `examples/networkx_components_demo.py`).
+- [x] Reusable CI workflow to verify solver output artifacts.
 - rustworkx adapter.
 - OR-Tools flow adapter.
 - cuGraph / RAPIDS export checker examples.
@@ -47,6 +42,7 @@ High-value checkers:
 
 A credible 1.0 should have:
 
+- pre-1.0 milestones toward stable public API and stable certificate schemas;
 - stable public API;
 - stable certificate schemas;
 - high coverage and fuzzing;

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="390" viewBox="0 0 980 390" role="img" aria-labelledby="title">
+  <title id="title">CertiGraph terminal demo</title>
+  <rect width="980" height="390" rx="24" fill="#020617"/>
+  <rect x="18" y="18" width="944" height="354" rx="18" fill="#0f172a" stroke="#334155"/>
+  <circle cx="48" cy="46" r="8" fill="#ef4444"/>
+  <circle cx="76" cy="46" r="8" fill="#f59e0b"/>
+  <circle cx="104" cy="46" r="8" fill="#22c55e"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22">
+    <text x="42" y="96" fill="#93c5fd">$ python examples/ai_solver_wrong_answer_demo.py</text>
+    <text x="42" y="136" fill="#f8fafc">Untrusted solver result:</text>
+    <text x="42" y="176" fill="#fca5a5">{ "ok": false,</text>
+    <text x="70" y="210" fill="#fca5a5">"message": "edge relaxation would improve distance" }</text>
+    <text x="42" y="260" fill="#93c5fd">$ python -m certigraph verify sssp examples/sssp_valid.json</text>
+    <text x="42" y="304" fill="#86efac">{ "ok": true, "message": "valid SSSP certificate" }</text>
+    <text x="42" y="344" fill="#cbd5e1">Do not trust the solver. Verify the result.</text>
+  </g>
+</svg>
